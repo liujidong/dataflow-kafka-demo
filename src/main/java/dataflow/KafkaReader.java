@@ -1,20 +1,18 @@
 package dataflow;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.NoSuchElementException;
-
+import com.google.cloud.dataflow.sdk.io.UnboundedSource;
+import com.google.cloud.dataflow.sdk.io.UnboundedSource.CheckpointMark;
+import com.google.cloud.dataflow.sdk.io.UnboundedSource.UnboundedReader;
+import kafka.KafkaConsumerObject;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.common.TopicPartition;
 import org.joda.time.Instant;
-
-import com.google.cloud.dataflow.sdk.io.UnboundedSource;
-import com.google.cloud.dataflow.sdk.io.UnboundedSource.CheckpointMark;
-import com.google.cloud.dataflow.sdk.io.UnboundedSource.UnboundedReader;
-
-import kafka.KafkaConsumerObject;
 import utils.PropertiesStack;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 public class KafkaReader extends UnboundedReader<String> {
 
@@ -27,7 +25,7 @@ public class KafkaReader extends UnboundedReader<String> {
 		TopicPartition partition0 = new TopicPartition(PropertiesStack.getKafkaTopic(), 0);
 		consumer.assign(Arrays.asList(partition0));
 	}
-	
+
 	@Override
 	public boolean advance() throws IOException {
 		if (consumer == null){
@@ -49,7 +47,7 @@ public class KafkaReader extends UnboundedReader<String> {
 			System.out.println("NO MORE TO READ");
 			return false;
 		}
-		
+
 	}
 
 	@Override
@@ -95,13 +93,13 @@ public class KafkaReader extends UnboundedReader<String> {
 	public Instant getCurrentTimestamp() throws NoSuchElementException {
 		return Instant.now();
 	}
-	
+
 	class KafkaCheckpointMark implements CheckpointMark{
 
 		public void finalizeCheckpoint() throws IOException {
 			// TODO Auto-generated method stub
 		}
-		
+
 	}
 
 }
